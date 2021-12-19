@@ -44,6 +44,7 @@ class ImageController extends Controller
                 ], 200);
         }
 
+        /** Get current locked voucher for customer */
         $voucher = Voucher::where('campaign_id', $campaign_id)
                             ->where('status', 'available')
                             ->whereHas('customers', function ($query) use ($authId) {
@@ -51,23 +52,31 @@ class ImageController extends Controller
                             })
                             ->orderBy('locked_until', 'DESC')
                             ->first();
-         
+        
+
         if (empty($voucher)) {
+            /** Throw error if no voucher found. */
+
             return response()->json([
                     'status' => 'error',
                     'data' => 'No locked voucher for this user.'
                 ], 200);
         }
+
+        //** call VoucherService */
         $voucherService = new VoucherService($voucher);
 
-
+        /** check if locked voucher is not yet expired */
         if ($voucherService->isVoucherStillLocked($authId)) {
+            /** update the voucher as used by the user. */
             $updateVoucher = $voucherService->updateVoucherStatus('used');
             return response()->json([
                     'status' => 'success',
                     'data' => $updateVoucher
                 ], 200);
         } else {
+            /** Throw error if locked voucher expired. */
+
             return response()->json([
                     'status' => 'error',
                     'data' => 'Voucher expired ('.$voucher->locked_until.') : 10 mins allocation exceeds.'

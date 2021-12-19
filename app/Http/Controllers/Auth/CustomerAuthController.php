@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class CustomerAuthController extends Controller
 {
+    /**
+     * user login to return token
+     *
+     * @param Request request
+     *
+     * @return token
+     */
+
     public function customerLogin(Request $request)
     {
         $credentials=[
@@ -23,6 +31,14 @@ class CustomerAuthController extends Controller
             return response()->json(['error' => 'UnAuthorised Access'], 401);
         }
     }
+
+    /**
+     * get auth user details
+     *
+     *
+     *
+     * @return Customer details
+     */
 
     public function me()
     {

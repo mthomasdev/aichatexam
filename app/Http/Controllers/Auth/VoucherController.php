@@ -25,12 +25,20 @@ class VoucherController extends Controller
             ], 200);
         }
 
+        /** get customer number transaction withing nth days */
         $totalTransactionsCriteria = PurchaseTransaction::getTotalTransactionFromPassedDays($authId, 30);
        
+        /** get customer's total spend withing nth days */
         $sumTransactionsCriteria = PurchaseTransaction::getSumTransactionFromPassedDays($authId, 30);
 
+        /** check if customer already used a voucher */
         $customerVoucherCount = Customer::checkUserHasVoucher($authId, $campaign_id);
        
+
+        /** Get all criteria for data return
+         * can help the front end side to notify user which criteria they're missing.
+         *
+         */
         $criteria = [];
 
         $criteria1 = [
@@ -87,6 +95,8 @@ class VoucherController extends Controller
 
         return response()->json($return, 200);
     }
+
+    //private function to assign a voucher to user and lock for 10 mins
 
     private function assignVoucherToUser()
     {

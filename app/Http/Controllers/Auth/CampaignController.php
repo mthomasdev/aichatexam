@@ -10,6 +10,14 @@ use App\Models\Campaign;
 
 class CampaignController extends Controller
 {
+    /**
+     * list all active campaigns
+     *
+     *
+     *
+     * @return Campaign
+     */
+
     public function campaigns()
     {
         $campagins = Campaign::where('is_active', true)
@@ -20,6 +28,15 @@ class CampaignController extends Controller
             'data' => $campagins
         ]);
     }
+
+
+    /**
+     * list all on goind campaign
+     *
+     *
+     *
+     * @return Campaign
+     */
 
     public function ongoingCampaigns()
     {
